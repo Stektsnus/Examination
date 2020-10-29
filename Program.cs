@@ -178,7 +178,7 @@ namespace Examination
 
         static string CheckSex(int lastDigit)
         {
-            if (lastDigit % 2 == 0)
+            if (lastDigit == 0 || lastDigit % 2 == 0)
             {
                 return "Female";
             }
