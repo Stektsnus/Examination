@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Dynamic;
-using System.Threading;
 
 namespace Examination
 {
@@ -14,7 +12,8 @@ namespace Examination
 
         static void GetUserInput()
         {
-            string userInput = "";
+            Console.WriteLine("Write your personal number: ");
+            string userInput = Console.ReadLine();
             long personalNumber;
 
             /* Check the user input string so it is actually convertable to an int
@@ -22,10 +21,9 @@ namespace Examination
             while (long.TryParse(userInput, out personalNumber) == false)
             {
                 
-                Console.WriteLine("Write your personal number: ");
+                Console.WriteLine("Something about the personal number is not correct. It should be in the format:\nYYYYMMDDnnnc or YYMMDD-nnnc.\nPlease try again.");
                 userInput = Console.ReadLine();
             }
-
 
             // Send the personal number for validation
             ValidatePersonalNumber(userInput);
@@ -55,27 +53,34 @@ namespace Examination
                 int day = int.Parse(personalNumber[6].ToString() + 
                                     personalNumber[7]);
 
-                int lastDigit = int.Parse(personalNumber[-1].ToString());
+                int lastDigit = int.Parse(personalNumber[11].ToString());
 
+
+                Console.WriteLine(GetDaysOfMonth(month, year));
                 // Validate the year of the personal number
-                if (ValidateYear(year) == false)
+                if (ValidateYear(year, month, day) == false)
                 {
-                    Console.WriteLine("The given year is not valid. It has to be a year between 1753 and 2020. Please try again.");
+                    Console.WriteLine("The given year is not valid. It has to be a year between 1753 and 2021. Please try again.");
                     GetUserInput();
                 }
+                // Validate the month of the personal number
                 else if (ValidateMonth(month) == false)
                 {
                     Console.WriteLine("The given month is not valid. It has to be a month between 01 and 12. Please try again.");
                     GetUserInput();
                 }
                 // Validate the the given day of the personal number
-                else if (month < GetDaysOfMonth())
+                else if (day > GetDaysOfMonth(month, year))
                 {
                     Console.WriteLine("The day given in the personal number is not inside the scope of valid days of the month. Please try again.");
                     GetUserInput();
                 }
 
                 // TODO: Check the gender of the personal number
+                else
+                {
+                    Console.WriteLine($"The personal number is valid.\nThe sex of the person is {CheckSex(lastDigit)}.");
+                }
 
             }
 
@@ -86,10 +91,31 @@ namespace Examination
             }
 
         }
-        static bool ValidateYear(int year)
+        static bool ValidateYear(int year, int month, int day)
         {
-            if (year < 2020 && year > 1753)
+            // Check that the year is in the valid span
+            if (year <= 2021 && year >= 1753)
             {
+
+                // Only the first of January is the valid day if the year is 2021. Check if its true.
+                if (year == 2021)
+                {
+                    if (month != 01)
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        if (day != 01)
+                        {
+                            return false;
+                        }
+                        else
+                        {
+                            return true;
+                        }
+                    }
+                }
                 return true;
             }
             else
@@ -101,28 +127,41 @@ namespace Examination
         // TODO: Finish the logic for extracting days of the month
         static int GetDaysOfMonth(int month, int year)
         {
-            if (month == 01 || 
-                month == 03 || 
-                month == 05 || 
-                month == 07 || 
-                month == 08 || 
-                month == 10 || 
-                month == 12 || )
+            switch(month) 
             {
-                return 31;
+                case 01: case 03: case 05: case 07: case 08: case 10: case 12:
+                    Console.WriteLine(month);
+                    return 31;
+                case 04: case 06: case 09: case 11:
+                    Console.WriteLine(month);
+                    return 30;
+                case 02:
+                    if (year % 400 == 0)
+                    {
+                        Console.WriteLine(month);
+                        return 29;
+                    }
+                    else
+                    {
+                        if (year % 100 == 0)
+                        {
+                            Console.WriteLine(month);
+                            return 28;
+                        }
+                        else if (year % 4 == 0)
+                        {
+                            Console.WriteLine(month);
+                            return 29;
+                        }
+                        else
+                        {
+                            Console.WriteLine(month);
+                            return 28;
+                        }
+                    }
+                default:
+                    return 0;
             }
-            else if (month == 04 || 
-                     month == 06 || 
-                     month == 09 || 
-                     month == 11 || )
-            {
-                return 30;
-            }
-            else 
-            {
-            }
-            
-                
         }
 
         static bool ValidateMonth(int month)
@@ -134,6 +173,18 @@ namespace Examination
             else
             {
                 return true;
+            }
+        }
+
+        static string CheckSex(int lastDigit)
+        {
+            if (lastDigit % 2 == 0)
+            {
+                return "Female";
+            }
+            else
+            {
+                return "Male";
             }
         }
     }
