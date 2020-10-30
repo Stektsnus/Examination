@@ -18,17 +18,29 @@ namespace Examination
 
             /* Check the user input string so it is actually convertable to an int
                Otherwise ask the user for another input */
+            if (userInput.Length != 12 || userInput.Length == 11)
+            {
+                if (userInput.Length == 11)
+                {
+                    userInput = TransformPersonalNumber(userInput);
+                }
+            }
+            else
+            {
+                
+                Console.WriteLine("Something about the personal number is not correct. It should be in the format:\nYYYYMMDDnnnc or YYMMDD-nnnc.\nPlease try again.");
+                GetUserInput();
+            }
             while (long.TryParse(userInput, out personalNumber) == false)
             {
                 
                 Console.WriteLine("Something about the personal number is not correct. It should be in the format:\nYYYYMMDDnnnc or YYMMDD-nnnc.\nPlease try again.");
-                userInput = Console.ReadLine();
+                GetUserInput();
             }
 
             // Send the personal number for validation
             ValidatePersonalNumber(userInput);
         }
-
 
         static void ValidatePersonalNumber(string personalNumber)
         {
@@ -91,6 +103,7 @@ namespace Examination
             }
 
         }
+
         static bool ValidateYear(int year, int month, int day)
         {
             // Check that the year is in the valid span
@@ -124,7 +137,6 @@ namespace Examination
             }
         }
 
-        // TODO: Finish the logic for extracting days of the month
         static int GetDaysOfMonth(int month, int year)
         {
             switch(month) 
@@ -187,5 +199,63 @@ namespace Examination
                 return "Male";
             }
         }
+
+        static string TransformPersonalNumber(string userInput)
+        {
+            // Create a new variable to store the four digit year
+            string fourDigitYear = "";
+
+            // Declare necessary variables for doing the age calculations
+            int currentYear = 2020;
+            int currentDecade = 20;
+            int personalNumberYear = int.Parse(userInput[0].ToString() + userInput[1].ToString());
+
+            switch (userInput[6].ToString())
+            {
+                case "-":
+                    if (personalNumberYear >= 0 && personalNumberYear <= currentDecade)
+                    {
+                        fourDigitYear = (currentYear - currentDecade + personalNumberYear).ToString();
+                    }
+                    else
+                    {
+                        fourDigitYear = (currentYear - (100 + currentDecade - personalNumberYear)).ToString();
+                    }
+
+                    // Create a 12 digit personal number with the new four digit year
+                    userInput = userInput.Remove(6, 1);
+                    userInput = fourDigitYear + userInput.Remove(0, 2);
+                    break;
+
+                case "+":
+                    if (personalNumberYear >= 0 && personalNumberYear <= currentDecade)
+                    {
+                        fourDigitYear = (currentYear - (100 + currentDecade - personalNumberYear)).ToString();
+                    }
+                    else
+                    {
+                        fourDigitYear = (currentYear - (200 + currentDecade - personalNumberYear)).ToString();
+                    }
+
+                    // Create a 12 digit personal number with the new four digit year
+                    userInput = userInput.Remove(6, 1);
+                    userInput = fourDigitYear + userInput.Remove(0, 2);
+                    break;
+                default:
+                    Console.WriteLine("Something about the personal number is not correct. It should be in the format:\nYYYYMMDDnnnc or YYMMDD-nnnc.\nPlease try again.");
+                    GetUserInput();
+                    break;
+
+            }
+            Console.WriteLine(userInput);
+            return userInput;
+        }
+
+        // Gör en funktion för Luhn-algoritmen som kollar så kontrollsiffran stämmer
+        static bool ValidateControlDigits(string personalNumber)
+        {
+
+        }
+        
     }
 }
