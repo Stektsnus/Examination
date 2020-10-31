@@ -87,6 +87,11 @@ namespace Examination
                     Console.WriteLine("The day given in the personal number is not inside the scope of valid days of the month. Please try again.");
                     GetUserInput();
                 }
+                else if (ValidateControlDigit(personalNumber) == false)
+                {
+                    Console.WriteLine("The given personal numbers cannot account for the control digit. Please try again.");
+                    GetUserInput();
+                }
 
                 // TODO: Check the gender of the personal number
                 else
@@ -206,8 +211,9 @@ namespace Examination
             string fourDigitYear = "";
 
             // Declare necessary variables for doing the age calculations
-            int currentYear = 2020;
-            int currentDecade = 20;
+            var currentDate = DateTime.Now;
+            int currentYear = int.Parse(currentDate.ToString("yyyy"));
+            int currentDecade = int.Parse(currentDate.ToString("yy"));
             int personalNumberYear = int.Parse(userInput[0].ToString() + userInput[1].ToString());
 
             switch (userInput[6].ToString())
@@ -245,17 +251,51 @@ namespace Examination
                     Console.WriteLine("Something about the personal number is not correct. It should be in the format:\nYYYYMMDDnnnc or YYMMDD-nnnc.\nPlease try again.");
                     GetUserInput();
                     break;
-
             }
             Console.WriteLine(userInput);
             return userInput;
         }
 
         // Gör en funktion för Luhn-algoritmen som kollar så kontrollsiffran stämmer
-        static bool ValidateControlDigits(string personalNumber)
+        static bool ValidateControlDigit(string personalNumber)
         {
+            // Store all the number in a string for easier operations later
+            string controlDigits = "";
+            int multiplicator = 2;
 
+            // Loop through the personal number and multiply by 2 and 1 respectively
+            for (int i = 2; i < 11; i++)
+            {
+                string controlDigit = (int.Parse(personalNumber[i].ToString()) * multiplicator).ToString();
+                controlDigits = controlDigits + controlDigit;
+                if (multiplicator == 2)
+                {
+                    multiplicator--;
+                }
+                else
+                {
+                    multiplicator++;
+                }
+            }
+            Console.WriteLine(controlDigits);
+
+            int controlNumber = 0;
+            foreach (char digit in controlDigits)
+            {
+                controlNumber = controlNumber + int.Parse(digit.ToString());
+            }
+
+            Console.WriteLine("kontrollnummer" + (((10 - (controlNumber % 10)) % 10)));
+            Console.WriteLine(personalNumber[11]);
+
+            if (((10 - (controlNumber % 10)) % 10) == int.Parse(personalNumber[11].ToString()))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
-        
     }
 }
