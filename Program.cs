@@ -12,7 +12,7 @@ namespace Examination
 
         static void GetUserInput()
         {
-            string userInput;
+            string userInput = "";
             Console.WriteLine("Write your personal identity number: ");
             userInput = Console.ReadLine();
 
@@ -22,45 +22,49 @@ namespace Examination
 
             /* Check how long the user input is. If it is 11 characters long it
                needs to be transformed into a 12 character long number. */
-            if (userInput.Length != 12 && userInput.Length != 11)
+            if (userInput.Length == 11)
+            {
+                if (userInput[6].ToString() == "-" || userInput[6].ToString() == "+")
+                {
+                    string[] userInputSplit = userInput.Split(userInput[6].ToString());
+                    foreach (string word in userInputSplit)
+                    {
+                        if (int.TryParse(word, out intChecker) == false)
+                        {
+                            Console.WriteLine("Something about the personal identity number is not correct. It should be in the format:\nYYYYMMDDnnnc, YYMMDD-nnnc or YYMMDD+nnnc.\nPlease try again.");
+                            GetUserInput();
+                        }
+                    }
+                    userInput = TransformpersonalidentityNumber(userInput);
+                    ValidatepersonalidentityNumber(userInput);
+                }
+                else
+                {
+                    Console.WriteLine("Something about the personal identity number is not correct. It should be in the format:\nYYYYMMDDnnnc, YYMMDD-nnnc or YYMMDD+nnnc.\nPlease try again.");
+                    GetUserInput();
+                    
+                }
+            }
+            /* Check the user input string so it is actually convertable to a long
+               Otherwise ask the user for another input. */
+            else if (userInput.Length == 12)
+            {
+                if (long.TryParse(userInput, out personalidentityNumber) == false)
+                {
+                    Console.WriteLine("Something about the personal identity number is not correct. It should be in the format:\nYYYYMMDDnnnc, YYMMDD-nnnc or YYMMDD+nnnc.\nPlease try again.");
+                    GetUserInput();
+                }
+                else
+                {
+                    ValidatepersonalidentityNumber(userInput);
+                }
+            }
+            else
             {
                 Console.WriteLine("Something about the personal identity number is not correct. It should be in the format:\nYYYYMMDDnnnc, YYMMDD-nnnc or YYMMDD+nnnc.\nPlease try again.");
                 GetUserInput();
             }
-            else
-            {
-                if (userInput.Length == 11)
-                {
-                    if (userInput[6].ToString() == "-" || userInput[6].ToString() == "+")
-                    {
-                        string[] userInputSplit = userInput.Split(userInput[6].ToString());
-                        foreach (string word in userInputSplit)
-                        {
-                            if (int.TryParse(word, out intChecker) == false)
-                            {
-                                Console.WriteLine("Something about the personal identity number is not correct. It should be in the format:\nYYYYMMDDnnnc, YYMMDD-nnnc or YYMMDD+nnnc.\nPlease try again.");
-                                GetUserInput();
-                            }
-                        }
-                        userInput = TransformpersonalidentityNumber(userInput);
-                    }
-                    else
-                    {
-                        Console.WriteLine("Something about the personal identity number is not correct. It should be in the format:\nYYYYMMDDnnnc, YYMMDD-nnnc or YYMMDD+nnnc.\nPlease try again.");
-                        GetUserInput();
-                    }
-                }
-            }
             
-            /* Check the user input string so it is actually convertable to a long
-               Otherwise ask the user for another input. */
-            while (long.TryParse(userInput, out personalidentityNumber) == false)
-            {
-                Console.WriteLine("Something about the personal identity number is not correct. It should be in the format:\nYYYYMM DDnnnc, YYMMDD-nnnc or YYMMDD+nnnc.\nPlease try again.");
-                GetUserInput();
-            }
-            // Send the personal identity number for validation
-            ValidatepersonalidentityNumber(userInput);
         }
 
         static void ValidatepersonalidentityNumber(string personalidentityNumber)
@@ -68,8 +72,8 @@ namespace Examination
             // This method calls upon the other validation methods to validate the input personal identity number.
             /* Use a try catch statement so that the program catches errors when trying to validate the personalidentity number
                aswell as restarting the program with the error presented to the user. This will prevent the program from crashing. */
-            try
-            {
+            /*try
+            {*/
                 // Declare neccessary variables for coming validation
                 int year = int.Parse(personalidentityNumber[0].ToString() + 
                                      personalidentityNumber[1].ToString() + 
@@ -112,15 +116,15 @@ namespace Examination
                 else
                 {
                     Console.WriteLine($"\nThe personal identity number is valid.\nThe sex of the person is {CheckSex(lastDigit)}.");
-                    Environment.Exit(1);
+                    Console.ReadKey();
                 }
             }
-            catch (Exception)
-            {
-                Console.WriteLine($"The personal identity number is not valid.\nPlease try again.\n");
-                GetUserInput();
-            }
+        /*catch (Exception)
+        {
+            Console.WriteLine($"The personal identity number is not valid.\nPlease try again.\n");
+            GetUserInput();
         }
+    }*/
 
         static bool ValidateYear(int year, int month, int day)
         {
@@ -157,34 +161,75 @@ namespace Examination
         static int GetDaysOfMonth(int month, int year)
         {
             // This returns how many days a given month on a given year has.
-            switch(month) 
+            if (month == 01)
             {
-                case 01: case 03: case 05: case 07: case 08: case 10: case 12:
-                    return 31;
-                case 04: case 06: case 09: case 11:
-                    return 30;
-                case 02:
-                    if (year % 400 == 0)
+                return 31;
+            }
+            else if (month == 02)
+            {
+                if (year % 400 == 0)
+                {
+                    return 29;
+                }
+                else
+                {
+                    if (year % 100 == 0)
+                    {
+                        return 28;
+                    }
+                    else if (year % 4 == 0)
                     {
                         return 29;
                     }
                     else
                     {
-                        if (year % 100 == 0)
-                        {
-                            return 28;
-                        }
-                        else if (year % 4 == 0)
-                        {
-                            return 29;
-                        }
-                        else
-                        {
-                            return 28;
-                        }
+                        return 28;
                     }
-                default:
-                    return 0;
+                }
+            }
+            else if (month == 03)
+            {
+                return 31;
+            }
+            else if (month == 04)
+            {
+                return 30;
+            }
+            else if (month == 05)
+            {
+                return 31;
+            }
+            else if (month == 06)
+            {
+                return 30;
+            }
+            else if (month == 07)
+            {
+                return 31;
+            }
+            else if (month == 08)
+            {
+                return 31;
+            }
+            else if (month == 09)
+            {
+                return 30;
+            }
+            else if (month == 10)
+            {
+                return 31;
+            }
+            else if (month == 11)
+            {
+                return 30;
+            }
+            else if (month == 12)
+            {
+                return 31;
+            }
+            else
+            {
+                return 0;
             }
         }
 
@@ -219,7 +264,7 @@ namespace Examination
             // Transforms a 10 digit personal identity number to a 12 digit personal identity number.
             
             // Declare necessary variables for doing the age calculations.
-            string fourDigitYear = "";
+            string fourDigitYear;
             var currentDate = DateTime.Now;
             int currentYear = int.Parse(currentDate.ToString("yyyy"));
             int currentDecade = int.Parse(currentDate.ToString("yy"));

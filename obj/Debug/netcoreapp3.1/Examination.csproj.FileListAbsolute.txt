@@ -11,3 +11,16 @@ C:\Users\sebas\Dropbox\Programmering\vs\Examination\obj\Debug\netcoreapp3.1\Exam
 C:\Users\sebas\Dropbox\Programmering\vs\Examination\obj\Debug\netcoreapp3.1\Examination.dll
 C:\Users\sebas\Dropbox\Programmering\vs\Examination\obj\Debug\netcoreapp3.1\Examination.pdb
 C:\Users\sebas\Dropbox\Programmering\vs\Examination\obj\Debug\netcoreapp3.1\Examination.genruntimeconfig.cache
+C:\Users\sebas\Dropbox\Programmering\vs\IDP\Examination\bin\Debug\netcoreapp3.1\Examination.exe
+C:\Users\sebas\Dropbox\Programmering\vs\IDP\Examination\bin\Debug\netcoreapp3.1\Examination.deps.json
+C:\Users\sebas\Dropbox\Programmering\vs\IDP\Examination\bin\Debug\netcoreapp3.1\Examination.runtimeconfig.json
+C:\Users\sebas\Dropbox\Programmering\vs\IDP\Examination\bin\Debug\netcoreapp3.1\Examination.runtimeconfig.dev.json
+C:\Users\sebas\Dropbox\Programmering\vs\IDP\Examination\bin\Debug\netcoreapp3.1\Examination.dll
+C:\Users\sebas\Dropbox\Programmering\vs\IDP\Examination\bin\Debug\netcoreapp3.1\Examination.pdb
+C:\Users\sebas\Dropbox\Programmering\vs\IDP\Examination\obj\Debug\netcoreapp3.1\Examination.csprojAssemblyReference.cache
+C:\Users\sebas\Dropbox\Programmering\vs\IDP\Examination\obj\Debug\netcoreapp3.1\Examination.AssemblyInfoInputs.cache
+C:\Users\sebas\Dropbox\Programmering\vs\IDP\Examination\obj\Debug\netcoreapp3.1\Examination.AssemblyInfo.cs
+C:\Users\sebas\Dropbox\Programmering\vs\IDP\Examination\obj\Debug\netcoreapp3.1\Examination.csproj.CoreCompileInputs.cache
+C:\Users\sebas\Dropbox\Programmering\vs\IDP\Examination\obj\Debug\netcoreapp3.1\Examination.dll
+C:\Users\sebas\Dropbox\Programmering\vs\IDP\Examination\obj\Debug\netcoreapp3.1\Examination.pdb
+C:\Users\sebas\Dropbox\Programmering\vs\IDP\Examination\obj\Debug\netcoreapp3.1\Examination.genruntimeconfig.cache
